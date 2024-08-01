@@ -13,7 +13,7 @@ services:
             MYSQL_PASSWORD: root
         volumes:
             - dbdata:/var/lib/mysql
-            - ./picard_db_dump.sql:/docker-entrypoint-initdb.d/dump.sql
+            - ./db_dump.sql:/docker-entrypoint-initdb.d/dump.sql
 
     adminer:
         image: adminer
