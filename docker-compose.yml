@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+    # MySQL Database
+    mysql:
+        image: mysql
+        ports:
+            - "3307:3306"
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: Picard
+            MYSQL_USER: root
+            MYSQL_PASSWORD: root
+        volumes:
+            - dbdata:/var/lib/mysql
+            - ./picard_db_dump.sql:/docker-entrypoint-initdb.d/dump.sql
+
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - "3000:8080"
+
+    # Laravel Picard Application
+    laravel:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        volumes:
+            - .:/var/www/html
+        ports:
+            - "8000:80"
+        environment:
+            - APACHE_DOCUMENT_ROOT=/var/www/html/public
+        depends_on:
+            - mysql
+volumes:
+    dbdata:
