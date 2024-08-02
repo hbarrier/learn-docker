@@ -9,11 +9,9 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: Picard
-            # MYSQL_USER: root
-            # MYSQL_PASSWORD: root
         volumes:
-            - ./db_dump.sql:/docker-entrypoint-initdb.d/dump.sql
             - ./dbdata:/var/lib/mysql
+            - ./db_dump.sql:/docker-entrypoint-initdb.d/dump.sql
 
     adminer:
         image: adminer
@@ -26,11 +24,11 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        volumes:
-            - .:/var/www/html
+        # volumes:
+        #     - .:/var/www/html
         ports:
             - "8000:80"
-        environment:
-            - APACHE_DOCUMENT_ROOT=/var/www/html/public
+        env_file:
+            - ./.env
         depends_on:
             - mysql
